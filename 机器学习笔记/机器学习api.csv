@@ -1,0 +1,149 @@
+﻿skearn,
+,
+from sklearn.model_selection import train_test_test_split,划分数据集和测试集
+"train_test_split(x,y,test_size= ,random_state=)","x：特征值 y：目标值 test_size：测试集/训练集 random_sate随机数种子（影响返回值，既测试数据的随机划分） 返回值是包含x_train,y_train,x_test,y_test的array"
+from sklearn.model_selection import GridSearchCV,模型调优 -- 交叉验证
+"estimator = GridSearchCV(estimator,param_grid= ,cv=5)","estimator :实例化的估计器 param_grid：param_grid = {'n_neighbors':[1,3,5,7]}超参数 例如K  cv：表示交叉验证的组数（训练组的组数）"
+estimator.best_score_,输出最高准确概率
+estimator.best_estimator_,输出最好的模型
+estimator.cv_results_,输出全部模型结果
+,
+from sklearn.preprocessing import MinMaxScaler,归一化
+"transform = MinMaxScaler(feature_range=(3,5))",实例化 feature_range表示归一化后的范围
+transform.fit_transform(array),数据归一转化（）中是要转化的数据索引
+,
+from sklearn.preprocessing import StandardScaler,标准化
+transform = StandardScaler(),实例化
+"transform.fit_transform(data[['milage','Liters','Consumtime']])",数据标准转化（）中是要转化的数据索引
+transform.var_,求转化后数据的方差
+transform.mean_,求转化后数据的平均值
+,
+,
+,
+from sklearn.neighbors import KNeighborsClassifier,K近邻算法预测
+estimator = sklearn.neighbors.KNsighborsClassifier(n_neighbors = 5，algorithm='auto'),估计器（实例）n_neighbors：K值，algorithm= auto：自动决定合适算法 brute：穷举搜索 ball_tree：高维2叉树（维度大于20）kd_tree：平衡2叉树（维度小于20效率高）
+"estimator.fit(x,y)",x：特征值 y：目标值。 K近邻算法训练数据
+estimator.predict(z),z：要预测的数据。   预测数据目标值   返回值为目标值
+,
+from sklearn.linear_model import LinearRegression,线性回归
+estimator = LinearRegression(fit_intercept=True),线性回归模型实例化  fit_intercept是否计算偏置 默认Ture
+,
+,
+from sklearn.metrics import mean_squared_error,模型评估均方误差
+"mean_squared_error(y_test,y_pre)",y_test：测试组目标真实值，y_pre：测试组目标预测值 计算均方误差
+,
+from sklearn.linear_model import SGDRegressor,随机梯度下降
+"estimator = SGDRegressor(max_iter=1000,learning_rate='constant',eta0=0.007，loss=‘squared_loss’)",max_iter最大计算次数 learning_rate速率类型（constant:常数 optimal变量 ）eta0学习率 loss=‘squared_loss’最小二乘
+estimator.intercept_,偏置
+estimator.coef_,拟合函数系数（权重）
+, 
+from sklearn.linear_model import Ridge,有岭回归的随机平均梯度算法
+"estimator = Ridge(alpha=1.0，fit_intercept = True, solver = 'auto , normalize = True')",实例化 alpha:正则化力度 （惩罚力度）fit_intercept:是否计算偏置 solver：梯度下降算法选择，默认SAG normalize = Flase 是否将数据进行标准化
+"estimator.fit(x_train, y_train)",训练开始
+from sklearn.linear_model import RidgeCV,可以对正则力度进行网格搜索的岭回归随机平均梯度算法
+"estimator = RidgeCV(alphas = (0.001,0.01,0.1,10,100))",实例化 alpha:正则化力度 （惩罚力度）fit_intercept:是否计算偏置 solver：梯度下降算法选择，默认SAG normalize = Flase 是否将数据进行标准化
+"estimator.fit(x_train, y_train)",训练开始
+,
+import joblib,机器学习模型的保存和加载
+"joblib.dump(estimator,'/Users/app/Documents/model/test.pkl')",保存
+estimator = joblib.load('/Users/app/Documents/model/test.pkl'),加载
+,
+from sklearn.linear_model import LogisticRegression,逻辑回归
+estimator = LogisticRegression(),实例化
+"estimator.fit(x_train,y_train)",训练
+,
+,
+from sklearn.metrics import classification_report,精确率、回召率指标 准确率指标
+"classification_report（y_test，y_pre，labels = (2,4）,target_names=('良性','恶性')",y_test：表示测试组真实值 y_pre：表示测试组预测值，labels表示逻辑回归的‘是否’数字的代表，target_names表示用于代替labels数字的符号
+,
+,
+,
+from sklearn.metrics import roc_auc_score,通过roc曲线确定的auc指标 用于反应数据及其不均匀时的可靠性 越接近1越可靠 0.5则胡说八道 0表示判断相反
+"roc_auc_score(y_test,y_pre))",输出roc
+,
+,
+from sklearn.feature_extraction import DictVectorizer,字典特征提取
+transfer = DictVectorizer(sparse=False),是否变成sparse矩阵sparse=True 节省空间，默认为True
+new_data = transfer.fit_transform(data),显示one-hot编码
+names = transfer.get_feature_names(),注意上面的函数传递过data数据了，不用再传递 作用是现实one-hot编码的columns
+x_train = x_train.to_dict(orient='records')转换成字典格式,转换成字典格式 用于决策树
+,
+from sklearn.tree import DecisionTreeClassifier,决策树
+"estimator = DecisionTreeClassifier(max_depth=,criterion='gini')",决策树训练器实例化 其他参数见ipad图片10
+,
+from sklearn.tree import export_graphviz,决策树可视化
+"export_graphviz(estimator,out_file='/Users/app/Desktop/tree.dot',feature_names=['age','pclass','female','male'])",生成的dot文件内容复制到http://webgraphviz.com/
+,
+from sklearn.ensemble import RandomForestClassifier,随机森林
+estimator = RandomForestClassifier(),随机森林实例化 具体参数见ipad图片11
+"param_grid = {'n_estimators':[120,200,300,500,800],'max_depth':[5,8,10,15,18]}",n_estimators 表示决策树数目
+"estimator = GridSearchCV(estimator,param_grid=param_grid,cv=3)",超参数传递
+,
+from sklearn.cluster import Kmeans,聚类算法
+"pre = KMeans(n_clusters=4,random_state=9).fit_predict(x)",n_clusters=表示分类的组数 x表示预测的array数据 输出结果为所有数据的分类array
+,
+from sklearn.datasets._samples_generator import make_blobs,用于生成聚集的随机点
+"x,y = make_blobs(n_samples=1000,n_features=2,centers=[[-1,1],[0,0],[1,1],[2,2]],cluster_std=[0.4,0.2,0.2,0.2],random_state=0)",x用来记录数据的特征值，y记录每一个数据属于的簇 n_samples生成的样本数量 n_features数据维度 centers数据的中心点 cluster_std标准差
+,
+from sklearn.metrics import calinski_harabasz_score,评估聚类算法的好坏 越大越好
+"calinski_harabasz_score(x,y_pre)",评估聚类算法
+,
+from sklearn.metrics import silhouette_score,评估聚类算法的好坏 越接近1越好 0不好
+"ret = silhouette_score(trans_data,y_pre)",评估聚类算法
+,
+,
+,
+,
+from sklearn.feature_extraction.text import CountVectorizer,英文文本特征提取 不会对单个字母，标点符号，中文等其他字符进行统计 文本分开的原则是空格
+transfer = CountVectorizer(stop_words=['dislike']),"实例化，没有sparse参数,不想分析的次写入stop_word"
+new_data = transfer.fit_transform(data),显示one-hot编码（sparse矩阵）
+new_data.toarray(),将sparse矩阵转化为array矩阵（利用观看）
+names = transfer.get_feature_names(),注意上面的函数传递过data数据了，不用再传递 作用是现实one-hot编码的columns
+,
+import jieba,中文文本断词
+ret = jieba.cut(text),将文本进行段词短句处理
+list（ret）,将文本变成列表形式
+ '.join(list(jieba.cut(text))),将列表内容以空格连接，从而可以使用CountVectorizer进行统计
+,
+from sklearn.feature_extraction.text import TfidfVectorizer,计算词频 逆向文档频率
+transfer =  TfidfVectorizer(),
+new_data = transfer.fit_transform(data),
+new_data.toarray(),
+names = transfer.get_feature_names(),
+,
+from sklearn.feature_selection import VarianceThreshold,按照方差大小的去维
+transfer = VarianceThreshold(threshold=1),方差小于1都不要 
+"new_data = transfer.fit_transform(data.iloc[:,1:10])",数据去维处理
+,
+"from scipy.stats import  pearsonr,spearmanr",皮尔逊，斯皮尔曼相关系数
+"ret = pearsonr(x1,x2)",计算皮尔逊相关系数
+"ret = spearmanr(x1,x2)",计算斯皮尔曼相关系数
+,
+from sklearn.decomposition import PCA,特征降维 高维变低维，转化为新的维度 不会去掉某个维度
+transfer = PCA(n_components=0.9),小数表示为保留百分之多少，整数是保留的维度数目
+trans_data = transfer.fit_transform(data),数据降维处理
+,
+seaborn,
+"seaborn.lmplot(x= , y= ,data数据集 ，hue=，fit_reg = False)","x第一维数据 , y第二维数据 ,data数据集 ，hue目标值，fit_reg = False是否线性拟合  绘制2维数据散点图"
+,
+,
+DataFrame,
+DataFrame.query(),数据筛选
+DataFrame.discribe(),显示全部统计数据
+,
+matplotlib.pyplot as plt,数学画图工具
+plt.ion(),
+plt.cla(),
+plt.clf(),
+plt.close(),
+plt.pause(0.05),
+"plt.text(x,y,string,fontsize=15,verticalalignment=""top"",horizontalalignment=""right"")","x,y:表示坐标值上的值string:表示说明文字fontsize:表示字体大小verticalalignment：垂直对齐方式 ，参数：[ ‘center’ | ‘top’ | ‘bottom’ | ‘baseline’ ]horizontalalignment：水平对齐方式 ，参数：[ ‘center’ | ‘right’ | ‘left’ ]"
+,
+,
+"plt.scatter(x[:,0],x[:,1],c=pre)#c是按照点分类",散点图绘制 c表示一组按照特征分类的数据集，之后按照c来对数据进行划分 常与聚类一起使用
+,
+string.jion(list),用指定字符串连接列表中的值
+,
+np.random.rand(),随机生成一个（0，1）的小数
+"np.linspace(1,2, 200)",生成指定间隔的200个数
+"np.clip([1,2,3,4],1,2)",
